@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "aerospike-rest-client.fullname" . }}
+  labels:
+    {{- include "aerospike-rest-client.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "aerospike-rest-client.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "aerospike-rest-client.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "aerospike-rest-client.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: AEROSPIKE_RESTCLIENT_HOSTNAME
+              value: {{ quote .Values.config.hostname }}
+            - name: AEROSPIKE_RESTCLIENT_PORT
+              value: {{ quote .Values.config.port }}
+            - name: AEROSPIKE_RESTCLIENT_CLIENTPOLICY_USER
+              value: {{ quote .Values.config.user }}
+            - name: AEROSPIKE_RESTCLIENT_CLIENTPOLICY_PASSWORD
+              value: {{ quote .Values.config.password }}
+            - name: AEROSPIKE_RESTCLIENT_CLIENTPOLICY_CLUSTERNAME
+              value: {{ quote .Values.config.clusterName }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
