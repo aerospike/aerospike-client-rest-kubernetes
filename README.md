@@ -12,3 +12,6 @@ To set database configuration:
 * --set config.user=some_username
 * --set config.password=some_password
 * --set config.clusterName=some_clusterName
+
+To change default number of replicas:
+* --set replicaCount=3
