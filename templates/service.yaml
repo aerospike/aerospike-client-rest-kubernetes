@@ -4,6 +4,7 @@ metadata:
   name: {{ include "aerospike-rest-client.fullname" . }}
   labels:
     {{- include "aerospike-rest-client.labels" . | nindent 4 }}
+    release: {{ .Release.Name }}
 spec:
   type: {{ .Values.service.type }}
   ports:

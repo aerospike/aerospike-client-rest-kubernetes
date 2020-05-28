@@ -2,16 +2,20 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Number of replicas
 replicaCount: 1
 
+# Aerospike REST client docker image
 image:
-  repository: aerospike/aerospike-client-rest:latest
+  repository: aerospike/aerospike-client-rest
+  tag: latest
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+# Configuration to connect to an Aerospike cluster
 config:
   hostname: "127.0.0.1"
   port: "3000"
@@ -19,6 +23,7 @@ config:
   password: ""
   clusterName: ""
 
+# Service Account to be used with REST client 'Deployment'
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -28,9 +33,11 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name:
 
+# Security context (pod level)
 podSecurityContext: {}
   # fsGroup: 2000
 
+# Security context (container level)
 securityContext: {}
   # capabilities:
   #   drop:
@@ -39,23 +46,32 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
+# Container port where REST client listens on
+containerPort: 8080
+
+# Service to access REST client 'Deployment'
+# service.type can be 'ClusterIP', 'NodePort' or 'LoadBalancer'
+# set at default 'ClusterIP' for when using ingress
 service:
   type: ClusterIP
   port: 8080
 
+# Ingress resource settings
 ingress:
   enabled: false
   annotations: {}
-    # kubernetes.io/ingress.class: rest-client
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: rest.client
-      paths: []
+    # kubernetes.io/ingress.class: nginx
+    # nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  rules: []
+    # - paths:
+    #     - '/'
+    #   host: rest.aerospike.com
   tls: []
-  #  - secretName: chart-example-tls
+  #  - secretName: rest-client-tls
   #    hosts:
-  #      - chart-example.local
+  #      - rest.aerospike.com
 
+# Resources - limits and requests for the REST client 'Deployment'
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -68,8 +84,11 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+# Node Selectors
 nodeSelector: {}
 
+# Tolerations and Taints
 tolerations: []
 
+# Affinity rules
 affinity: {}
