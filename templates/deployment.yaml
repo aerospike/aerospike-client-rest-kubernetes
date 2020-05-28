@@ -55,9 +55,9 @@ spec:
             httpGet:
               path: /
               port: http
-            # Delay readiness by 10s at startup
+            # Delay readiness check by 10s at startup
             initialDelaySeconds: 10
-            # Perform livenessProbe check every 10s (default)
+            # Perform readiness check every 10s (default)
             periodSeconds: 10
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
