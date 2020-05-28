@@ -1,41 +1,38 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "aerospike-rest-client.fullname" . -}}
-{{- $svcPort := .Values.service.port -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1beta1
-{{- else -}}
+{{- $dot := . }}
 apiVersion: extensions/v1beta1
-{{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ include "aerospike-rest-client.fullname" . }}
+  {{- with .Values.ingress.annotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
   labels:
     {{- include "aerospike-rest-client.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    release: {{ .Release.Name }}
 spec:
-{{- if .Values.ingress.tls }}
+  {{- if .Values.ingress.tls }}
   tls:
-  {{- range .Values.ingress.tls }}
-    - hosts:
-      {{- range .hosts }}
-        - {{ . | quote }}
-      {{- end }}
-      secretName: {{ .secretName }}
+  {{- range $tls := .Values.ingress.tls }}
+  - hosts:
+    {{- range $host := $tls.hosts }}
+    - {{ $host | quote }}
+    {{- end }}
+    secretName: {{ $tls.secretName }}
   {{- end }}
-{{- end }}
+  {{- end }}
   rules:
-  {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
-      http:
-        paths:
-        {{- range .paths }}
-          - path: {{ . }}
-            backend:
-              serviceName: {{ $fullName }}
-              servicePort: {{ $svcPort }}
+  {{- range $rule := .Values.ingress.rules }}
+  - http:
+      paths:
+        {{- range $path := $rule.paths }}
+        - path: {{ $path | quote }}
+          backend:
+            serviceName: {{ include "aerospike-rest-client.fullname" $dot }}
+            servicePort: {{ $.Values.service.port }}
         {{- end }}
+    {{- if $rule.host }}
+    host: $rule.host
+    {{- end }}
   {{- end }}
 {{- end }}
