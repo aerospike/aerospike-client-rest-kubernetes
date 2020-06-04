@@ -1,23 +1,97 @@
-# aerospike-client-rest-kubernetes
-An Aerospike REST client Helm chart for Kubernetes
+# Helm chart for Aerospike REST Client on Kubernetes
 
-## Installation
+Implements Aerospike REST client deployment on Kubernetes
+
+## Usage
+
+### Add Aerospike repository
+
 ```
-helm install --set config.hostname=<aerospike_hostname> rest ./aerospike-rest-client
+helm repo add aerospike https://aerospike.github.io/aerospike-kubernetes-enterprise
 ```
 
-To set database configuration:
-* --set config.hostname=some_hostname
-* --set config.port=some_port
-* --set config.user=some_username
-* --set config.password=some_password
-* --set config.clusterName=some_clusterName
+### Install the chart
 
-To change default number of replicas:
-* --set replicaCount=3
+```
+helm install rest-client aerospike/aerospike-rest-client --set config.hostname=<aerospike_hostname>
+```
+
+## Configuration
 
 
-### Configurations
+### Connect to Aerospike cluster
+
+#### Specify aerospike cluster seed IP or hostname and port
+
+```
+helm install rest-client aerospike/aerospike-rest-client \
+            --set config.hostname=demo-aerospike-enterprise \
+            --set config.port=3000
+```
+
+#### Specify username and password (for security enabled clusters)
+
+```
+helm install rest-client aerospike/aerospike-rest-client \
+            --set config.hostname=demo-aerospike-enterprise \
+            --set config.port=3000 \
+            --set config.user=superman \
+            --set config.password=krypton
+```
+
+#### Specify cluster name (if applicable)
+```
+--set config.clusterName=demo-aerospike-enterprise
+```
+
+
+### Expose REST client deployment
+
+#### Using NodePort type service
+
+Aerospike REST client can be exposed for external access using NodePort type services.
+
+Set `service.type=NodePort` to expose REST client via a `NodePort`.
+
+Applications can access REST client endpoint at `<K8sNodeIP>:<NodePort>`.
+
+#### Using LoadBalancer type service
+
+Aerospike REST client can be exposed for external access using Load balancers.
+
+Set `service.type=LoadBalancer` to expose REST client via a network load balancer.
+
+Applications can access REST client endpoint at `<LoadBalancerIP>:<LoadBalancerPort>`
+
+#### Using Ingress
+
+Aerospike REST client can be exposed for external access using ingress.
+
+- Set `ingress.enabled=true`,
+- Specify `ingress.annotations`, `ingress.rules` and `ingress.tls` configuration.
+
+For example (using `nginx` controller),
+```yaml
+# Ingress resource settings
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  rules: []
+    - paths:
+        - '/'
+      # host: rest.aerospike.com
+  tls: []
+  # - secretName: rest-client-tls
+  #   hosts:
+  #   - rest.aerospike.com
+```
+
+Applications can access REST client endpoint at the specified url (or `host`) in the `rules` or at the external IP of ingress controller (loadbalancer).
+
+
+## Configuration parameters and default values
 
 | Parameter | Description| Default Value |
 |:----------|:----------:|:-------------:|
