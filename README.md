@@ -103,6 +103,8 @@ Applications can access REST client endpoint at the specified url (or `host`) in
 | `config.user` | Username for access control to connect to the aerospike cluster | `""` |
 | `config.password` | Password for access control to connect to the aerospike cluster | `""` |
 | `config.clusterName` | Cluster name defined for the aerospike cluster | `""` |
+| `config.requireAuthentication` | Require the Basic Authentication on each request | `false` |
+| `config.poolSize` | Represents the max size of the clients LRU cache | `16` |
 | `serviceAccount.create` | Create and use a serviceAccount for the deployment | `true` |
 | `serviceAccount.annotations` | Annotations for the serviceAccount resource | `{} (nil)` |
 | `serviceAccount.name` | ServiceAccount name whether to be created or already exists | `true` |

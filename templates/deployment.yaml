@@ -39,6 +39,10 @@ spec:
               value: {{ quote .Values.config.password }}
             - name: AEROSPIKE_RESTCLIENT_CLIENTPOLICY_CLUSTERNAME
               value: {{ quote .Values.config.clusterName }}
+            - name: AEROSPIKE_RESTCLIENT_REQUIREAUTHENTICATION
+              value: {{ quote .Values.config.requireAuthentication }}
+            - name: AEROSPIKE_RESTCLIENT_POOL_SIZE
+              value: {{ quote .Values.config.poolSize }}
           ports:
             - name: http
               containerPort: {{ .Values.containerPort | default 8080 }}
