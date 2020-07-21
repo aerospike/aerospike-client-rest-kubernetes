@@ -22,6 +22,8 @@ config:
   user: ""
   password: ""
   clusterName: ""
+  requireAuthentication: "false"
+  poolSize: "16"
 
 # Service Account to be used with REST client 'Deployment'
 serviceAccount:
