@@ -121,3 +121,13 @@ Applications can access REST client endpoint at the specified url (or `host`) in
 | `nodeSelector` | Specify node selectors labels for Pod scheduling | `{} (nil)` |
 | `tolerations` | Define tolerations and taints for Pod scheduling and execution | `[] (nil)` |
 | `affinity` | Define pod and node affinity and antiAffinity | `{} (nil)` |
+
+Extra configuration properties for the REST client can be set using the `--values` (or `-f`) flag and specifying a YAML file with configuration data.
+```yaml
+config:
+  extraEnvs:
+     - name: AEROSPIKE_RESTCLIENT_CLIENTPOLICY_AUTHMODE
+       value: "EXTERNAL"
+     - name: AEROSPIKE_RESTCLIENT_SSL_ENABLED
+       value: "true"
+```

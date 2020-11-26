@@ -24,6 +24,8 @@ config:
   clusterName: ""
   requireAuthentication: "false"
   poolSize: "16"
+  # Additional environment variables to set
+  extraEnvs: []
 
 # Service Account to be used with REST client 'Deployment'
 serviceAccount:
