@@ -43,6 +43,9 @@ spec:
               value: {{ quote .Values.config.requireAuthentication }}
             - name: AEROSPIKE_RESTCLIENT_POOL_SIZE
               value: {{ quote .Values.config.poolSize }}
+          {{- if .Values.config.extraEnvs }}
+            {{- toYaml .Values.config.extraEnvs | trim | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.containerPort | default 8080 }}
