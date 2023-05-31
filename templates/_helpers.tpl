@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "aerospike-rest-client.name" -}}
+{{- define "aerospike-rest-gateway.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "aerospike-rest-client.fullname" -}}
+{{- define "aerospike-rest-gateway.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -27,16 +27,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "aerospike-rest-client.chart" -}}
+{{- define "aerospike-rest-gateway.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Common labels
 */}}
-{{- define "aerospike-rest-client.labels" -}}
-helm.sh/chart: {{ include "aerospike-rest-client.chart" . }}
-{{ include "aerospike-rest-client.selectorLabels" . }}
+{{- define "aerospike-rest-gateway.labels" -}}
+helm.sh/chart: {{ include "aerospike-rest-gateway.chart" . }}
+{{ include "aerospike-rest-gateway.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -46,17 +46,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "aerospike-rest-client.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "aerospike-rest-client.name" . }}
+{{- define "aerospike-rest-gateway.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "aerospike-rest-gateway.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "aerospike-rest-client.serviceAccountName" -}}
+{{- define "aerospike-rest-gateway.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "aerospike-rest-client.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "aerospike-rest-gateway.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}

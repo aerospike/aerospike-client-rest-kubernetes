@@ -3,12 +3,12 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "aerospike-rest-client.fullname" . }}
+  name: {{ include "aerospike-rest-gateway.fullname" . }}
   {{- with .Values.ingress.annotations }}
   annotations: {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
-    {{- include "aerospike-rest-client.labels" . | nindent 4 }}
+    {{- include "aerospike-rest-gateway.labels" . | nindent 4 }}
     release: {{ .Release.Name }}
 spec:
   {{- if .Values.ingress.tls }}
@@ -28,7 +28,7 @@ spec:
         {{- range $path := $rule.paths }}
         - path: {{ $path | quote }}
           backend:
-            serviceName: {{ include "aerospike-rest-client.fullname" $dot }}
+            serviceName: {{ include "aerospike-rest-gateway.fullname" $dot }}
             servicePort: {{ $.Values.service.port }}
         {{- end }}
     {{- if $rule.host }}

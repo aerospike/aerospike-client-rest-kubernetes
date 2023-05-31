@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "aerospike-rest-client.fullname" . }}
+  name: {{ include "aerospike-rest-gateway.fullname" . }}
   labels:
-    {{- include "aerospike-rest-client.labels" . | nindent 4 }}
+    {{- include "aerospike-rest-gateway.labels" . | nindent 4 }}
     release: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "aerospike-rest-client.selectorLabels" . | nindent 6 }}
+      {{- include "aerospike-rest-gateway.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "aerospike-rest-client.selectorLabels" . | nindent 8 }}
+        {{- include "aerospike-rest-gateway.selectorLabels" . | nindent 8 }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      serviceAccountName: {{ include "aerospike-rest-client.serviceAccountName" . }}
+      serviceAccountName: {{ include "aerospike-rest-gateway.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:

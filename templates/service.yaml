@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "aerospike-rest-client.fullname" . }}
+  name: {{ include "aerospike-rest-gateway.fullname" . }}
   labels:
-    {{- include "aerospike-rest-client.labels" . | nindent 4 }}
+    {{- include "aerospike-rest-gateway.labels" . | nindent 4 }}
     release: {{ .Release.Name }}
 spec:
   type: {{ .Values.service.type }}
@@ -13,4 +13,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "aerospike-rest-client.selectorLabels" . | nindent 4 }}
+    {{- include "aerospike-rest-gateway.selectorLabels" . | nindent 4 }}

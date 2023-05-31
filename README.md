@@ -1,6 +1,6 @@
-# Helm chart for Aerospike REST Client on Kubernetes
+# Helm chart for Aerospike REST Gateway on Kubernetes
 
-Implements Aerospike REST client deployment on Kubernetes
+Implements Aerospike REST Gateway deployment on Kubernetes
 
 ## Usage
 
@@ -13,7 +13,7 @@ helm repo add aerospike https://aerospike.github.io/aerospike-kubernetes-enterpr
 ### Install the chart
 
 ```
-helm install rest-client aerospike/aerospike-rest-client --set config.hostname=<aerospike_hostname>
+helm install rest-gateway aerospike/aerospike-rest-gateway --set config.hostname=<aerospike_hostname>
 ```
 
 ## Configuration
@@ -24,7 +24,7 @@ helm install rest-client aerospike/aerospike-rest-client --set config.hostname=<
 #### Specify aerospike cluster seed IP or hostname and port
 
 ```
-helm install rest-client aerospike/aerospike-rest-client \
+helm install rest-gateway aerospike/aerospike-rest-gateway \
             --set config.hostname=demo-aerospike-enterprise \
             --set config.port=3000
 ```
@@ -32,7 +32,7 @@ helm install rest-client aerospike/aerospike-rest-client \
 #### Specify username and password (for security enabled clusters)
 
 ```
-helm install rest-client aerospike/aerospike-rest-client \
+helm install rest-gateway aerospike/aerospike-rest-gateway \
             --set config.hostname=demo-aerospike-enterprise \
             --set config.port=3000 \
             --set config.user=superman \
@@ -83,7 +83,7 @@ ingress:
         - '/'
       # host: rest.aerospike.com
   tls: []
-  # - secretName: rest-client-tls
+  # - secretName: rest-gateway-tls
   #   hosts:
   #   - rest.aerospike.com
 ```
@@ -96,7 +96,7 @@ Applications can access REST client endpoint at the specified url (or `host`) in
 | Parameter | Description| Default Value |
 |:----------|:----------:|:-------------:|
 | `replicaCount` | Number of replicas for the Aerospike REST client deployment | `1` |
-| `image.repository` | Aerospike REST client docker image repository | `aerospike/aerospike-client-rest` |
+| `image.repository` | Aerospike REST client docker image repository | `aerospike/aerospike-rest-gateway` |
 | `image.tag` | Aerospike REST client docker image tag | `latest` |
 | `config.hostname` | Aerospike cluster Seed IP address to connect to | `127.0.0.1` |
 | `config.port` | Aerospike cluster Seed Port | `3000` |
