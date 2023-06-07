@@ -1,3 +1,5 @@
+# DEPRECATED: This helm chart is now located at https://github.com/aerospike/helm-charts/aerospike-rest-gateway.
+
 # Helm chart for Aerospike REST Client on Kubernetes
 
 Implements Aerospike REST client deployment on Kubernetes
